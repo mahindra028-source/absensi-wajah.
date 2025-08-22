@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Absensi Wajah</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+      background: #f4f4f4;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: inline-block;
+    }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    video, canvas {
+      width: 300px;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📋 Absensi Wajah</h1>
+    <form id="absensiForm">
+      <input type="text" id="nama" placeholder="Masukkan Nama" required>
+      <br>
+      <button type="button" onclick="startCamera()">Aktifkan Kamera</button>
+      <button type="button" onclick="capturePhoto()">Ambil Foto</button>
+      <br>
+      <video id="video" autoplay></video>
+      <canvas id="canvas" style="display:none;"></canvas>
+      <br>
+      <button type="submit">Simpan Absensi</button>
+    </form>
+  </div>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+
+    // Aktifkan kamera
+    function startCamera() {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+          video.srcObject = stream;
+        })
+        .catch(err => {
+          alert("Kamera tidak bisa diakses: " + err);
+        });
+    }
+
+    // Ambil foto dari kamera
+    function capturePhoto() {
+      canvas.style.display = "block";
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    }
+
+    // Simpan absensi (sementara hanya console log)
+    document.getElementById("absensiForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      const nama = document.getElementById("nama").value;
+      const foto = canvas.toDataURL("image/png"); // hasil foto base64
+
+      console.log("Nama: " + nama);
+      console.log("Foto: " + foto);
+
+      alert("Absensi berhasil disimpan untuk " + nama + " ✅");
+    });
+  </script>
+</body>
+</html>

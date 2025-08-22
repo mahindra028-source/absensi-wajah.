@@ -1,0 +1,88 @@
+indeks.html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Absensi Wajah</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    video {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+    canvas {
+      display: none;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Absensi Wajah</h1>
+    <p>Aktifkan kamera untuk melakukan absensi</p>
+    <video id="camera" autoplay playsinline></video>
+    <canvas id="snapshot"></canvas>
+    <br>
+    <button onclick="takeAttendance()">Absen Sekarang</button>
+    <p id="status"></p>
+  </div>
+
+  <script>
+    const video = document.getElementById('camera');
+    const canvas = document.getElementById('snapshot');
+    const statusText = document.getElementById('status');
+
+    // Aktifkan kamera
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(error => {
+        alert("Kamera tidak bisa diakses: " + error);
+      });
+
+    // Fungsi ambil snapshot (simulasi absensi)
+    function takeAttendance() {
+      const context = canvas.getContext('2d');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Bisa dikirim ke server, sekarang simulasi sukses
+      statusText.innerText = "✅ Absensi berhasil!";
+      statusText.style.color = "green";
+    }
+  </script>
+</body>
+</html>
